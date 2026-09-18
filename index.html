@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Fun Facts</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #eef6ff, #fdf2f8);
+        color: #1f2937;
+      }
+
+      .card {
+        width: min(90vw, 620px);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12);
+        padding: 2rem;
+        text-align: center;
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        color: #7c3aed;
+      }
+
+      .fact-box {
+        margin: 1.5rem 0;
+        padding: 1.5rem;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        line-height: 1.6;
+        min-height: 140px;
+        display: grid;
+        place-items: center;
+      }
+
+      button {
+        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        color: white;
+        border: none;
+        border-radius: 999px;
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 8px 18px rgba(139, 92, 246, 0.3);
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Random Fun Facts</h1>
+      <div class="fact-box" id="factBox">Loading a fun fact...</div>
+      <button id="newFactBtn" type="button">Show another fact</button>
+    </div>
+
+    <script>
+      const facts = [
+        "Octopuses have three hearts: two pump blood to the gills and one pumps it to the rest of the body.",
+        "Bananas are berries, but strawberries are not.",
+        "A day on Venus is longer than a year on Venus.",
+        "Honey never spoils. Archaeologists have found edible honey in ancient tombs.",
+        "Wombat poop is cube-shaped.",
+        "There are more possible iterations of a chess game than there are atoms in the observable universe.",
+        "A group of flamingos is called a flamboyance.",
+        "The Eiffel Tower can grow about 6 inches taller in summer because of heat expansion.",
+        "Some clouds can weigh more than 1 million pounds.",
+        "A shrimp's heart is in its head."
+      ];
+
+      const factBox = document.getElementById("factBox");
+      const newFactBtn = document.getElementById("newFactBtn");
+
+      function showRandomFact() {
+        const randomIndex = Math.floor(Math.random() * facts.length);
+        factBox.textContent = facts[randomIndex];
+      }
+
+      newFactBtn.addEventListener("click", showRandomFact);
+      showRandomFact();
+    </script>
+  </body>
+</html>
