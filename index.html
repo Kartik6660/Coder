@@ -3,99 +3,311 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Random Fun Facts</title>
+    <meta name="description" content="Fun Fact Explorer - discover interesting facts about the world around us." />
+    <title>Fun Fact Explorer</title>
     <style>
+      :root {
+        --ink: #172033;
+        --muted: #667085;
+        --surface: rgba(255, 255, 255, 0.82);
+        --white: #ffffff;
+        --purple: #7148e8;
+        --pink: #f05a9d;
+        --shadow: 0 24px 60px rgba(38, 29, 85, 0.14);
+      }
+
       * {
         box-sizing: border-box;
       }
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #eef6ff, #fdf2f8);
-        color: #1f2937;
+      html {
+        scroll-behavior: smooth;
       }
 
-      .card {
-        width: min(90vw, 620px);
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12);
-        padding: 2rem;
+      body {
+        min-width: 320px;
+        margin: 0;
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 8% 8%, rgba(255, 205, 226, 0.8), transparent 28%),
+          radial-gradient(circle at 95% 22%, rgba(194, 221, 255, 0.75), transparent 30%),
+          linear-gradient(135deg, #fff8fc 0%, #f3f6ff 100%);
+        line-height: 1.6;
+      }
+
+      .page-shell {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 3.5rem 0 4rem;
+      }
+
+      header {
+        max-width: 760px;
+        margin: 0 auto 3rem;
         text-align: center;
       }
 
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0 0 0.75rem;
+        color: var(--purple);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before,
+      .eyebrow::after {
+        width: 24px;
+        height: 2px;
+        content: "";
+        background: currentColor;
+        opacity: 0.45;
+      }
+
       h1 {
-        margin-top: 0;
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        color: #7c3aed;
+        margin: 0;
+        color: #39247c;
+        font-size: clamp(2.5rem, 7vw, 5rem);
+        letter-spacing: -0.065em;
+        line-height: 1.05;
       }
 
-      .fact-box {
-        margin: 1.5rem 0;
-        padding: 1.5rem;
-        border-radius: 16px;
-        background: #f8fafc;
-        border: 2px solid #e2e8f0;
-        font-size: clamp(1.1rem, 2vw, 1.5rem);
-        line-height: 1.6;
-        min-height: 140px;
+      .subtitle {
+        margin: 1rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.25rem);
+      }
+
+      .fact-grid {
         display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.25rem;
+      }
+
+      .fact-card {
+        position: relative;
+        display: flex;
+        min-height: 240px;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 1.6rem;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: 0 10px 28px rgba(40, 35, 90, 0.08);
+        backdrop-filter: blur(12px);
+        transition: transform 220ms ease, box-shadow 220ms ease;
+      }
+
+      .fact-card::after {
+        position: absolute;
+        right: -28px;
+        bottom: -36px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        content: "";
+        background: var(--accent);
+        opacity: 0.1;
+      }
+
+      .fact-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow);
+      }
+
+      .icon {
+        display: grid;
+        width: 52px;
+        height: 52px;
         place-items: center;
+        margin-bottom: 1.25rem;
+        border-radius: 16px;
+        background: var(--icon-bg);
+        color: var(--accent);
+        font-size: 1.65rem;
       }
 
-      button {
-        background: linear-gradient(135deg, #8b5cf6, #ec4899);
-        color: white;
-        border: none;
-        border-radius: 999px;
-        padding: 0.9rem 1.5rem;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        box-shadow: 0 8px 18px rgba(139, 92, 246, 0.3);
+      .category {
+        margin: 0 0 0.5rem;
+        color: var(--accent);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
       }
 
-      button:hover {
-        transform: translateY(-2px);
+      .fact-card h2 {
+        margin: 0 0 0.55rem;
+        font-size: 1.35rem;
+        line-height: 1.2;
+      }
+
+      .fact-card p:not(.category) {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+
+      .space { --accent: #7553e8; --icon-bg: #eeeaff; }
+      .animals { --accent: #e27a2e; --icon-bg: #fff0df; }
+      .science { --accent: #159a9c; --icon-bg: #dff8f4; }
+      .history { --accent: #c65782; --icon-bg: #ffe8f0; }
+      .technology { --accent: #3578d4; --icon-bg: #e5f0ff; }
+      .nature { --accent: #419451; --icon-bg: #e5f6e7; }
+
+      .highlight {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 1.25rem;
+        margin-top: 2.5rem;
+        padding: 1.5rem 1.75rem;
+        border-radius: 24px;
+        color: var(--white);
+        background: linear-gradient(110deg, #5d3bc4, #bd4f9a);
+        box-shadow: 0 18px 38px rgba(104, 59, 172, 0.26);
+      }
+
+      .highlight-mark {
+        display: grid;
+        width: 64px;
+        height: 64px;
+        place-items: center;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.18);
+        font-size: 2rem;
+      }
+
+      .highlight h2 {
+        margin: 0 0 0.2rem;
+        font-size: 1.35rem;
+      }
+
+      .highlight p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.88);
+      }
+
+      footer {
+        margin-top: 2.5rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        .page-shell {
+          padding-top: 2.5rem;
+        }
+
+        header {
+          margin-bottom: 2rem;
+        }
+
+        .fact-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 500px) {
+        .page-shell {
+          width: min(100% - 1.25rem, 420px);
+          padding-bottom: 2.5rem;
+        }
+
+        .fact-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .fact-card {
+          min-height: auto;
+        }
+
+        .highlight {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+
+        .highlight-mark {
+          margin: 0 auto;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .fact-card { transition: none; }
       }
     </style>
   </head>
   <body>
-    <div class="card">
-      <h1>Random Fun Facts</h1>
-      <div class="fact-box" id="factBox">Loading a fun fact...</div>
-      <button id="newFactBtn" type="button">Show another fact</button>
-    </div>
+    <main class="page-shell">
+      <header>
+        <p class="eyebrow">A little knowledge goes a long way</p>
+        <h1>Fun Fact Explorer</h1>
+        <p class="subtitle">Discover something interesting!</p>
+      </header>
 
-    <script>
-      const facts = [
-        "Octopuses have three hearts: two pump blood to the gills and one pumps it to the rest of the body.",
-        "Bananas are berries, but strawberries are not.",
-        "A day on Venus is longer than a year on Venus.",
-        "Honey never spoils. Archaeologists have found edible honey in ancient tombs.",
-        "Wombat poop is cube-shaped.",
-        "There are more possible iterations of a chess game than there are atoms in the observable universe.",
-        "A group of flamingos is called a flamboyance.",
-        "The Eiffel Tower can grow about 6 inches taller in summer because of heat expansion.",
-        "Some clouds can weigh more than 1 million pounds.",
-        "A shrimp's heart is in its head."
-      ];
+      <section class="fact-grid" aria-label="Fun facts by category">
+        <article class="fact-card space">
+          <div class="icon" aria-hidden="true">✦</div>
+          <p class="category">Space</p>
+          <h2>Venus has a very long day</h2>
+          <p>One rotation of Venus takes longer than the time it needs to orbit the Sun.</p>
+        </article>
 
-      const factBox = document.getElementById("factBox");
-      const newFactBtn = document.getElementById("newFactBtn");
+        <article class="fact-card animals">
+          <div class="icon" aria-hidden="true">🐙</div>
+          <p class="category">Animals</p>
+          <h2>Octopuses have three hearts</h2>
+          <p>Two hearts move blood to the gills, while the third sends it around the body.</p>
+        </article>
 
-      function showRandomFact() {
-        const randomIndex = Math.floor(Math.random() * facts.length);
-        factBox.textContent = facts[randomIndex];
-      }
+        <article class="fact-card science">
+          <div class="icon" aria-hidden="true">⚗</div>
+          <p class="category">Science</p>
+          <h2>Honey can last for ages</h2>
+          <p>When sealed and stored properly, honey can remain edible for an incredibly long time.</p>
+        </article>
 
-      newFactBtn.addEventListener("click", showRandomFact);
-      showRandomFact();
-    </script>
+        <article class="fact-card history">
+          <div class="icon" aria-hidden="true">⌛</div>
+          <p class="category">History</p>
+          <h2>The Eiffel Tower moves</h2>
+          <p>Heat makes the iron expand, so the famous tower can grow several centimeters in summer.</p>
+        </article>
+
+        <article class="fact-card technology">
+          <div class="icon" aria-hidden="true">⌘</div>
+          <p class="category">Technology</p>
+          <h2>The first computer bug was real</h2>
+          <p>In 1947, a moth trapped in a computer relay was recorded as a literal “bug.”</p>
+        </article>
+
+        <article class="fact-card nature">
+          <div class="icon" aria-hidden="true">☘</div>
+          <p class="category">Nature</p>
+          <h2>Clouds are heavier than they look</h2>
+          <p>A large fluffy cloud can contain hundreds of tons of water suspended in the air.</p>
+        </article>
+      </section>
+
+      <aside class="highlight" aria-labelledby="did-you-know-title">
+        <div class="highlight-mark" aria-hidden="true">💡</div>
+        <div>
+          <h2 id="did-you-know-title">Did You Know?</h2>
+          <p>Bananas are berries, but strawberries are not. Botany can be full of surprises!</p>
+        </div>
+      </aside>
+
+      <footer>Keep exploring. There is always something new to learn.</footer>
+    </main>
   </body>
 </html>
